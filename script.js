@@ -3,9 +3,25 @@ const quoteText = document.getElementById("quote");
 const authorText = document.getElementById("author");
 const twitterBtn = document.getElementById("twitter");
 const newQuoteBtn = document.getElementById("new-quote");
+const loader = document.getElementById("loader");
+
+// Show loading element
+function loading() {
+  loader.hidden = false;
+  quoteContainer.hidden = true;
+}
+
+// Hide loading animation
+function complete() {
+  if (!loader.hidden) {
+    quoteContainer.hidden = false;
+    loader.hidden = true;
+  }
+}
 
 // * GET quote from API * //
 async function getQuote() {
+  loading();
   // ! This is using a proxyUrl in order to avoid the CORS error
   const proxyUrl = "https://damp-cove-31141.herokuapp.com/";
   const apiUrl =
@@ -29,6 +45,8 @@ async function getQuote() {
       quoteText.classList.remove("long-quote");
     }
     quoteText.innerText = data.quoteText;
+    // Stop loader and show quote
+    complete();
   } catch (error) {
     // ! this api will sometimes produce errors that are resolved by moving getQuote up into the error catch.  If it doesn't catch an error, it calls normally below
     getQuote();
@@ -48,4 +66,4 @@ newQuoteBtn.addEventListener("click", getQuote);
 twitterBtn.addEventListener("click", tweetQuote);
 
 // On load
-getQuote();
+getQuote(loading);
