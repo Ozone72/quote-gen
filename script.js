@@ -15,7 +15,7 @@ async function getQuote() {
     const response = await fetch(proxyUrl + apiUrl);
     // ! The data variable won't be set until the response variable is set.
     const data = await response.json();
-    console.log(data);
+
     // This is to fix blank author field
     if (data.quoteAuthor === "") {
       authorText.innerText = "Unknown";
@@ -34,6 +34,18 @@ async function getQuote() {
     getQuote();
   }
 }
+
+// * Use Twitter button to post a quote to my account
+const tweetQuote = () => {
+  const quote = quoteText.innerText;
+  const author = authorText.innerText;
+  const twitterUrl = `https://twitter.com/intent/tweet?text="${quote}" - ${author}`;
+  window.open(twitterUrl, "_blank");
+};
+
+// * Event Listeners *
+newQuoteBtn.addEventListener("click", getQuote);
+twitterBtn.addEventListener("click", tweetQuote);
 
 // On load
 getQuote();
