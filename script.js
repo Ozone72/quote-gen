@@ -5,14 +5,12 @@ const twitterBtn = document.getElementById("twitter");
 const newQuoteBtn = document.getElementById("new-quote");
 const loader = document.getElementById("loader");
 
-// Show loading element
-function loading() {
+function showLoadingSpinner() {
   loader.hidden = false;
   quoteContainer.hidden = true;
 }
 
-// Hide loading animation
-function complete() {
+function hideLoadingSpinner() {
   if (!loader.hidden) {
     quoteContainer.hidden = false;
     loader.hidden = true;
@@ -21,8 +19,8 @@ function complete() {
 
 // * GET quote from API * //
 async function getQuote() {
-  loading();
-  // ! This is using a proxyUrl in order to avoid the CORS error
+  showLoadingSpinner();
+  // ! This is using a personal proxyUrl in order to avoid the CORS error
   const proxyUrl = "https://damp-cove-31141.herokuapp.com/";
   const apiUrl =
     "http://api.forismatic.com/api/1.0/?method=getQuote&format=json&lang=en";
@@ -46,7 +44,7 @@ async function getQuote() {
     }
     quoteText.innerText = data.quoteText;
     // Stop loader and show quote
-    complete();
+    hideLoadingSpinner();
   } catch (error) {
     // ! this api will sometimes produce errors that are resolved by moving getQuote up into the error catch.  If it doesn't catch an error, it calls normally below
     getQuote();
@@ -66,4 +64,4 @@ newQuoteBtn.addEventListener("click", getQuote);
 twitterBtn.addEventListener("click", tweetQuote);
 
 // On load
-getQuote(loading);
+getQuote(showLoadingSpinner);
